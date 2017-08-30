@@ -1,0 +1,100 @@
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- Favicon --!>
+<link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}">
+
+<style>
+.navbar-collapse.collapse {
+display: block!important;
+}
+
+.navbar-nav>li, .navbar-nav {
+float: left !important;
+}
+
+.navbar-nav.navbar-right:last-child {
+margin-right: -15px !important;
+}
+
+.navbar-right {
+float: right!important;
+}
+
+</style>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Leadr{%if title%} - {{title}}{% endif %}</title>
+
+    <meta property="og:title" content="Leadr"/>
+    <meta property="og:description" content="Jot your thoughts down in secret, to be revealed to all at the end of the game."/>
+    <meta property="og:url" content="{{request.url}}"/>
+    <meta property="og:type" content = "website" />
+    <meta property="og:image" content="{{url_for('static',filename='leadr-ogp.png',_external=True)}}" />
+
+</head>
+
+
+
+
+
+
+
+
+<body>
+<div class="container">
+
+{% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+        <div class="alert alert-info">
+           {{message}}
+        </div>
+    {% endfor %}
+{% endwith %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <a href="{{url_for('index')}}"><img src="/static/leadrsitelogo.png" class="img-responsive" alt="leadr"></a>
+        </div>
+
+
+        <div class="col-md-2">
+        {% if current_user.get_id() %}
+            {{jot_count}} jots so far, of which {{user_jot_count}} are yours!
+        {% else %}
+            {{jot_count}} jots so far!
+        {% endif %}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+{% if current_user.get_id() %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">    
+            <li> <a href="{{url_for('new_jot')}}">New Jot</a></li>
+            <li> <a href="{{url_for('all_jots')}}">All Jots(SECRET)</a></li>
+            <li><a href="{{url_for('new_password')}}">Change Password</a></li>
+            <li><a href="{{url_for('logout_view')}}">Log out {{current_user.username}}</a></li>
+        </ul>
+    </div>
+</nav>
+</table>
+{% endif %}
+<p><p>
+{% block content %}
+{% endblock %}
+</div>
+
+
+
+</body>

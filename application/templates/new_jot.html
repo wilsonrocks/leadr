@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form action="{{url_for('new_jot')}}" method="post" name="new_jot">
+<div class="form-group">
+    {{form.csrf_token}}
+    {{form.id}}
+    Jot down your secret thoughts:
+    {{form.text(class="form-control")}}<br>
+    <input type="submit" value="Jot!">
+
+</div>
+</form>
+{% endblock %}

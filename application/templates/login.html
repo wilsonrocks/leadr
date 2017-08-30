@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form action="{{url_for('login_view')}}" method="post" name="login" class="form-inline">
+    <div class="form-group">
+    {{form.csrf_token}}
+    Username: {{form.username(class="form-control")}}
+    Password: {{form.password(class="form-control")}}
+    <input type="submit" value="Log In">
+    </div>
+</form>
+<a href="{{url_for('forgot_password')}}">I forgot my password</a>
+{% endblock %}
