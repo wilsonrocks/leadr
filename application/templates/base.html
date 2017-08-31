@@ -6,7 +6,6 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
 <!-- Favicon --!>
 <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}">
 
@@ -41,45 +40,38 @@ float: right!important;
 
 </head>
 
-
-
-
-
-
-
-
 <body>
 <div class="container">
+<div class = "row"> 
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div class="alert alert-info">
+               {{message}}
+            </div>
+        {% endfor %}
+    {% endwith %}
+</div>
 
-{% with messages = get_flashed_messages() %}
-    {% for message in messages %}
-        <div class="alert alert-info">
-           {{message}}
-        </div>
-    {% endfor %}
-{% endwith %}
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-            <a href="{{url_for('index')}}"><img src="/static/leadrsitelogo.png" class="img-responsive" alt="leadr"></a>
-        </div>
+<div class = "row">
+<a href="{{url_for('index')}}"><img src="/static/leadrsitelogo.png" class="img-responsive center-block" alt="leadr"></a>
+</div>
 
 
-        <div class="col-md-2">
-        {% if current_user.get_id() %}
-            {{jot_count}} jots so far, of which {{user_jot_count}} are yours!
-        {% else %}
-            {{jot_count}} jots so far!
-        {% endif %}
-        </div>
-        <div class="col-md-2"></div>
-    </div>
+<div class = "row text-center">
+<em>
+{% if current_user.get_id() %}
+    {{jot_count}} jots so far, of which {{user_jot_count}} are yours!
+{% else %}
+    {{jot_count}} jots so far!
+{% endif %}
+</em>
 </div>
 
 {% if current_user.get_id() %}
+<div class = "row">
+
 <nav class="navbar navbar-default">
-    <div class="container-fluid">
+    <div class="container">
         <ul class="nav navbar-nav">    
             <li> <a href="{{url_for('new_jot')}}">New Jot</a></li>
             <li> <a href="{{url_for('all_jots')}}">All Jots(SECRET)</a></li>
@@ -88,12 +80,16 @@ float: right!important;
         </ul>
     </div>
 </nav>
-</table>
+</div>
 {% endif %}
-<p><p>
+</div>
+<div class="row">
+    <div class="container">
 {% block content %}
 {% endblock %}
+    </div>
 </div>
+
 
 
 
