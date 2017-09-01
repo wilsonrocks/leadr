@@ -13,7 +13,10 @@ signer = TimestampSigner(secrets.SECRET_KEY)
 
 @app.route('/')
 def index():
-    return redirect(url_for('login_view'))
+    if current_user.is_authenticated:
+        return redirect(url_for('new_jot'))
+    else:
+        return redirect(url_for('login_view'))
 
 @app.route('/secret')
 @login_required
