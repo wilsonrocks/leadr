@@ -24,6 +24,7 @@ class User(Model):
     email = CharField(verbose_name="Email Address")
     hexcode = CharField(max_length=6)
     password_hash = CharField(max_length=87)
+    avatar = CharField(max_length=255, null=True)
 
     #flask-login stuff
     @property
@@ -66,3 +67,7 @@ class Jot(Model):
     datetime = DateTimeField(default=datetime.now)
     text = CharField(max_length=140)
 
+    def date_formatted(self):
+        return self.datetime.strftime("%d %b %y")
+    def time_formatted(self):
+        return self.datetime.strftime("%H:%M")
