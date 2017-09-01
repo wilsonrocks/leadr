@@ -6,9 +6,21 @@
     {{form.csrf_token}}
     {{form.id}}
     Jot down your secret thoughts:
-    {{form.text(class="form-control")}}<br>
+    {{form.text(class="form-control",maxlength=140)}}<br>
     <input type="submit" value="Jot!">
 
 </div>
 </form>
+<script src="{{url_for('static',filename='bootstrap-maxlength.js')}}"></script>
+<script>
+$(document).ready(function () {
+            $('textarea#text').maxlength({
+                alwaysShow: true
+            });
+
+            hljs.initHighlightingOnLoad();
+
+        });
+</script>
+
 {% endblock %}
