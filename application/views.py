@@ -21,9 +21,9 @@ def index():
 @app.route('/secret')
 @login_required
 def all_jots():
-    users = User.select()
-    jots = Jot.select()
-    return render_template('all_jots.html',users=users,jots=jots)
+    user = User.get(id=current_user.id)
+    jots = Jot.select().where(Jot.user==user).order_by(Jot.datetime.desc())
+    return render_template('all_jots.html', jots=jots)
 
 
 

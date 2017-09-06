@@ -1,46 +1,43 @@
 {% extends 'base.html' %}
 {% block content %}
-    {% if users %}
-        {% for user in users %}
-            {% if user.jots %}
-                <ul class = "list-group">
-                    {% for jot in user.jots %}
-                        {% if user.avatar %}
 
+These are your jots. You cannot edit them. When the game is over, you will be able to see them, along with everybody else's.
 
+{% if jots %}
+    <ul class = "list-group">
+        {% for jot in jots %}
+
+            <li class="list-group-item">
+                <div class="media">
+                    <div class="media-left">
+                        {% if current_user.avatar %}
+                            <img class = "media-object center-block" style = "width:60px " src="{{url_for('static',filename=current_user.avatar)}}"></img>
+                            
                         {% endif %}
+                        <div class = "text-center" style="width:80px">
+                            <strong>
+                                {{current_user.username}}<br>
+                                {{jot.time_formatted()}}<br>
+                                {{jot.date_formatted()}}
+                            </strong>
 
-
-                    <li class="list-group-item">
-                        <div class="media">
-                            <div class="media-left">
-                                {% if user.avatar %}
-                                    <img class = "media-object center-block" style = "width:60px " src="{{url_for('static',filename=user.avatar)}}"></img>
-                                    
-                                {% endif %}
-                                <div class = "text-center" style="width:80px">
-                                    <strong>
-                                        {{user.username}}<br>
-                                        {{jot.time_formatted()}}<br>
-                                        {{jot.date_formatted()}}
-                                    </strong>
-
-                                </div>
-                            </div>
-                            <div class=media-body>
-
-                                {{jot.text}}
-
-                            </div>
                         </div>
-                       
-                       
-                    </li>
-                    {% endfor %}
+                    </div>
+                    <div class=media-body>
 
-                </ul>
-            {% endif %}
+                        {{jot.text}}
+
+                    </div>
+                </div>
+               
+               
+            </li>
         {% endfor %}
-    {% endif %}
+
+    </ul>
+{% else %}
+    No jots here! You should <a href="{{url_for("new_jot")}}">make a new one!</a>
+{% endif %}
+
 
 {% endblock %}

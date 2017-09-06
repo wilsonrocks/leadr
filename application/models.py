@@ -4,7 +4,6 @@ from passlib.hash import pbkdf2_sha256 as hasher
 from datetime import datetime
 from email.message import EmailMessage
 import smtplib
-##import application.secrets as secrets
 
 from . import secrets
 
@@ -71,3 +70,5 @@ class Jot(Model):
         return self.datetime.strftime("%d %b %y")
     def time_formatted(self):
         return self.datetime.strftime("%H:%M")
+
+#TODO Add model for a turn, fields: timestamp, year, turn no
