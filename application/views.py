@@ -18,7 +18,7 @@ def index():
     else:
         return redirect(url_for('login_view'))
 
-@app.route('/secret')
+@app.route('/myjots')
 @login_required
 def all_jots():
     user = User.get(id=current_user.id)
@@ -36,6 +36,7 @@ def new_jot():
         text = form.text.data
         Jot.create(text=text, user=user)
         flash("You jotted '{}'".format(text))
+        return redirect(url_for('new_jot'))
 
     return render_template("new_jot.html",form=form)
 
