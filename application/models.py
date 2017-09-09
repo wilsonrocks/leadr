@@ -1,4 +1,4 @@
-from peewee import Model, CharField, DateTimeField, TextField, ForeignKeyField, PostgresqlDatabase
+from peewee import Model, CharField, DateTimeField, TextField, ForeignKeyField, IntegerField, PostgresqlDatabase
 from passlib.hash import pbkdf2_sha256 as hasher
 
 from datetime import datetime
@@ -71,4 +71,11 @@ class Jot(Model):
     def time_formatted(self):
         return self.datetime.strftime("%H:%M")
 
-#TODO Add model for a turn, fields: timestamp, year, turn no
+class Turn(Model):
+    class Meta:
+        database = db
+    timestamp = DateTimeField(default=datetime.now)
+    number = IntegerField()
+    year = CharField(max_length=6)
+
+
