@@ -1,0 +1,30 @@
+
+{% macro display_jot(jot) %}
+<li class="list-group-item">
+    <div class="media">
+        <div class="media-left">
+            {% if jot.user.avatar %}
+                <img class = "media-object center-block" style = "width:60px " src="{{url_for('static',filename=jot.user.avatar)}}"></img>
+            {% endif %}
+            <div class = "text-center" style="width:80px">
+                <strong>
+                    {{jot.user.username}}<br>
+                    {{jot.time_formatted()}}<br>
+                    {{jot.date_formatted()}}
+                </strong>
+
+            </div>
+        </div>
+        <div class=media-body>
+
+            {{jot.text}}
+
+        </div>
+    </div>
+   
+   
+</li>
+
+
+
+{% endmacro %}

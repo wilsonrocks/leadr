@@ -1,11 +1,26 @@
+{% from 'macros.html' import display_jot %}
 {% extends "base.html" %}
 {% block content %}
 
+{%if just_jotted %}
+    You just jotted:
+    <ul>{{display_jot(just_jotted)}}</ul>
+{% endif %}
+
 <form action="{{url_for('new_jot')}}" method="post" name="new_jot">
+
+
+
 <div class="form-group">
     {{form.csrf_token}}
     {{form.id}}
-    Jot down your secret thoughts:
+
+    {% if just_jotted %}
+        Jot again:
+    {% else %}
+        Jot down your secret thoughts:
+    {% endif %}
+
     {{form.text(class="form-control",maxlength=140)}}<br>
     <input type="submit" value="Jot!">
 

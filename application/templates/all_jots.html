@@ -1,37 +1,17 @@
+{% from 'macros.html' import display_jot %}
 {% extends 'base.html' %}
 {% block content %}
+
+
+
+
 
 These are your jots. You cannot edit them. When the game is over, you will be able to see them, along with everybody else's.
 
 {% if jots %}
     <ul class = "list-group">
         {% for jot in jots %}
-
-            <li class="list-group-item">
-                <div class="media">
-                    <div class="media-left">
-                        {% if current_user.avatar %}
-                            <img class = "media-object center-block" style = "width:60px " src="{{url_for('static',filename=current_user.avatar)}}"></img>
-                            
-                        {% endif %}
-                        <div class = "text-center" style="width:80px">
-                            <strong>
-                                {{current_user.username}}<br>
-                                {{jot.time_formatted()}}<br>
-                                {{jot.date_formatted()}}
-                            </strong>
-
-                        </div>
-                    </div>
-                    <div class=media-body>
-
-                        {{jot.text}}
-
-                    </div>
-                </div>
-               
-               
-            </li>
+            {{ display_jot(jot)}}
         {% endfor %}
 
     </ul>

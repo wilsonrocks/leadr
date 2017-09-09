@@ -34,9 +34,8 @@ def new_jot():
     if form.validate_on_submit():
         user = User.get(id=int(form.id.data))
         text = form.text.data
-        Jot.create(text=text, user=user)
-        flash("You jotted '{}'".format(text))
-        return redirect(url_for('new_jot'))
+        just_jotted = Jot.create(text=text, user=user)
+        return render_template('new_jot.html',just_jotted=just_jotted,form=New_Jot_Form(id=current_user.id))
 
     return render_template("new_jot.html",form=form)
 
