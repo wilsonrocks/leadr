@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, flash, request
+from flask import render_template, url_for, redirect, flash, request, g
 from flask_login import login_user, logout_user, login_required, current_user
 
 from itsdangerous import TimestampSigner, BadTimeSignature, SignatureExpired
@@ -25,7 +25,11 @@ def all_jots():
     jots = Jot.select().where(Jot.user==user).order_by(Jot.datetime.desc())
     return render_template('all_jots.html', jots=jots)
 
-
+@app.route('/jotted')
+@login_required
+def jotted():
+    jot = request.args.get('jot')
+    return render_template('jotted.html',jot=Jot.get(id=jot))
 
 @app.route('/jot', methods = ['GET', 'POST'])
 @login_required
@@ -34,14 +38,10 @@ def new_jot():
     if form.validate_on_submit():
         user = User.get(id=int(form.id.data))
         text = form.text.data
-        just_jotted = Jot.create(text=text, user=user)
-        return render_template('new_jot.html',just_jotted=just_jotted,form=New_Jot_Form(id=current_user.id))
+        jot =  Jot.create(text=text, user=user)
+        return redirect(url_for('jotted',jot=jot.id))
 
     return render_template("new_jot.html",form=form)
-
-
-
-
 
 @app.route('/logout', methods=['GET'])
 def logout_view():

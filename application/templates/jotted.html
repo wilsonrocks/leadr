@@ -1,0 +1,10 @@
+{% from 'macros.html' import display_jot %}
+{% extends 'base.html' %}
+{% block content %}
+Your newest jot:
+{{display_jot(jot)}}
+Thanks!<br>
+Why not <a href="{{url_for('new_jot')}}">jot again</a>?
+
+
+{% endblock %}
