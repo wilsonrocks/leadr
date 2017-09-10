@@ -53,7 +53,7 @@ def login_view():
     form = Login_Form()
     
     if form.validate_on_submit():
-        username = form.username.data
+        username = form.username.data.lower()
         password = form.password.data
         try:
             user = User.get(username=username)
