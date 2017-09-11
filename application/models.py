@@ -1,4 +1,4 @@
-from peewee import Model, CharField, DateTimeField, TextField, ForeignKeyField, IntegerField, PostgresqlDatabase
+from peewee import Model, CharField, DateTimeField, TextField, ForeignKeyField, IntegerField, BooleanField, PostgresqlDatabase
 from passlib.hash import pbkdf2_sha256 as hasher
 
 from datetime import datetime
@@ -21,6 +21,7 @@ class User(Model):
     username = CharField()
     civname = CharField()
     email = CharField(verbose_name="Email Address")
+    confirmed = BooleanField(default=False)
     hexcode = CharField(max_length=6)
     password_hash = CharField(max_length=87)
     avatar = CharField(max_length=255, null=True)
