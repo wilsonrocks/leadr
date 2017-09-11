@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, flash, request, g
+from flask import render_template, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 
 from itsdangerous import TimestampSigner, BadTimeSignature, SignatureExpired
@@ -52,22 +52,34 @@ def logout_view():
 def login_view():
     form = Login_Form()
     
+    #if they have filled in the form, deal with the login
     if form.validate_on_submit():
-        username = form.username.data.lower()
+        username = form.username.data.lower()#no need for it to be case sensitive
         password = form.password.data
-        try:
+
+        try:#does the user exist? Redirect to login if they don't
             user = User.get(username=username)
         except User.DoesNotExist:
             flash("User {} does not exist, bro!".format(username))
             return redirect(url_for('login_view'))
+        
+        #before trying to authenticate, see if the user is confirmed
+
+        if user.confirmed == False:
+            flash("User {} is not confirmed - see the link in the email...".format(username))
+            return redirect(url_for('login_view'))
+
+        #if they are confirmed, try and authenticate, redirect to login if fails
 
         if user.authenticate(password):
+            #it all works, yay! log them in!
             login_user(user)
             return redirect(url_for('new_jot'))
         else:
             flash("That password isn't right, sis!")
             return redirect(url_for('login_view'))
 
+    #if it's not filled in, or not valid, let them do it again, including errors if needed
     return render_template("login.html",form=form) 
 
 

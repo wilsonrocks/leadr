@@ -18,12 +18,12 @@ class User(Model):
         db_table = "user_account"
     pass
     
-    username = CharField()
+    username = CharField(unique=True)
     civname = CharField()
     email = CharField(verbose_name="Email Address")
     confirmed = BooleanField(default=False)
     hexcode = CharField(max_length=6)
-    password_hash = CharField(max_length=87)
+    password_hash = CharField(max_length=87, null=True)
     avatar = CharField(max_length=255, null=True)
 
     #flask-login stuff
