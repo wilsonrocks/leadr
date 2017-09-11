@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 
-from itsdangerous import TimestampSigner, BadTimeSignature, SignatureExpired
+from itsdangerous import TimestampSigner, BadTimeSignature, Signer, BadSignature, SignatureExpired
 from passlib.hash import pbkdf2_sha256 as hasher
 
 from application import app
@@ -9,7 +9,8 @@ from application.forms import Login_Form, New_Jot_Form, New_Password_Form, Forgo
 import application.secrets as secrets
 from application.models import User, Jot
 
-signer = TimestampSigner(secrets.SECRET_KEY)
+timedsigner = TimestampSigner(secrets.SECRET_KEY)
+untimedsigner = Signer(secrets.SECRET_KEY)
 
 @app.route('/')
 def index():
@@ -87,7 +88,7 @@ def login_view():
 @app.route('/single/<user>/<code>')
 def single_use(user, code):
     try:
-        signer.unsign(request.url, max_age=3600)
+        timedsigner.unsign(request.url, max_age=3600)
         user_to_login = User.get(username=user)
         login_user(user_to_login)
         return redirect(url_for('new_password'))
@@ -99,6 +100,43 @@ def single_use(user, code):
     except SignatureExpired:
         flash("That link is more than an hour old")
         return redirect(url_for('index'))
+
+
+@app.route('/register/<username>/<code>')
+def register(username,code):
+    try:
+        untimedsigner.unsign(request.url)
+    except BadSignature:
+        flash("That link was not valid")
+        return redirect(url_for('index'))
+
+    #special URL is okay, let's log whoever out
+    if current_user.is_authenticated:
+        flash("Logging out {} as this is a link for registering someone".format(current_user.username))
+        logout_user()
+    #but does the user exist?
+
+    try:
+        user = User.get(username=username)
+    except User.DoesNotExist:
+        flash("That user doesn't exist. This is strange in a link that should only be generated for valid users!")
+        return redirect(url_for('index'))
+
+       
+    #okay so the user exists, but what if they're already registered?
+
+    if user.confirmed:
+        flash("That user is already registered, go ahead and log in.")
+        return redirect(url_for('index'))
+
+    #so they aren't already registered, let's register them, log them in, and send them to the change password page
+    user.confirmed = True
+    user.save()#now registered - is there a weakpoint here where if they don't change password straight away, the hash is left as null?
+    login_user(user)
+    flash("You are now registered for leadr. Please set a password so you can come back!")
+    return redirect(url_for('new_password'))
+
+
 
 @app.route('/password', methods=['GET', 'POST'])
 @login_required
@@ -117,11 +155,11 @@ def new_password():
 def forgot_password():
     form = Forgot_Password_Form()
     if form.validate_on_submit():
-        flash("If the address {} is registered with us, then we have sent a login link to it. It is valid for one hour. Use it to change your password.".format(form.email.data))
+        flash("If the address {} is _with us, then we have sent a login link to it. It is valid for one hour. Use it to change your password.".format(form.email.data))
         try:
             user = User.get(email=form.email.data)
             link_stem = url_for('single_use',user=user.username, code="", _external=True)
-            signed_link = signer.sign(link_stem).decode()
+            signed_link = timedsigner.sign(link_stem).decode()
             message = "Hi {},\n\nYou requested a login in order to change your password. Please use this link:\n{}\nThanks!\nlove from leadr x".format(user.username,signed_link)
             user.send_email("Forgotten leadr password?",message)
             
@@ -129,3 +167,4 @@ def forgot_password():
             pass # fail gracefully for security reasons - people now can't tell if an email address is registered on the site
         return redirect(url_for('login_view'))
     return render_template('forgot.html',form=form)
+
