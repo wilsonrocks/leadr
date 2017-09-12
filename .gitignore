@@ -3,3 +3,4 @@ secrets.py
 __pycache__
 test_data.py
 *.swp
+*.log
