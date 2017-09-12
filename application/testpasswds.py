@@ -1,4 +1,4 @@
-from models import User
+from .models import User
 
 while True:
     uname = input("Username?")

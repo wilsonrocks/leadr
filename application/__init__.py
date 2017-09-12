@@ -1,13 +1,13 @@
 from flask import Flask, url_for
 from flask_login import LoginManager, current_user
 
-from application.models import User,Jot
+from .models import User,Jot
 
 app = Flask(__name__)
-from application import views
+from . import views
 
 
-from application import secrets
+from . import secrets
 app.config['SECRET_KEY'] = secrets.SECRET_KEY
 
 

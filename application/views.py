@@ -4,10 +4,10 @@ from flask_login import login_user, logout_user, login_required, current_user
 from itsdangerous import TimestampSigner, BadTimeSignature, Signer, BadSignature, SignatureExpired
 from passlib.hash import pbkdf2_sha256 as hasher
 
-from application import app
-from application.forms import Login_Form, New_Jot_Form, New_Password_Form, Forgot_Password_Form
-import application.secrets as secrets
-from application.models import User, Jot
+from . import app
+from .forms import Login_Form, New_Jot_Form, New_Password_Form, Forgot_Password_Form
+from . import secrets
+from .models import User, Jot
 
 timedsigner = TimestampSigner(secrets.SECRET_KEY)
 untimedsigner = Signer(secrets.SECRET_KEY)
