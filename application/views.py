@@ -155,7 +155,7 @@ def new_password():
 def forgot_password():
     form = Forgot_Password_Form()
     if form.validate_on_submit():
-        flash("If the address {} is _with us, then we have sent a login link to it. It is valid for one hour. Use it to change your password.".format(form.email.data))
+        flash("If the address {} is registered with us, then we have sent a login link to it. It is valid for one hour. Use it to change your password.".format(form.email.data))
         try:
             user = User.get(email=form.email.data)
             link_stem = url_for('single_use',user=user.username, code="", _external=True)
