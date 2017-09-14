@@ -105,7 +105,7 @@ def single_use(user, code):
 @app.route('/register/<username>/<code>')
 def register(username,code):
     try:
-        untimedsigner.unsign(request.url)
+        untimedsigner.unsign(request.url)#the url request has to be http not https for this to work. I'm not sure why! In terms of security, it's redirected, but
     except BadSignature:
         flash("That link was not valid")
         return redirect(url_for('index'))

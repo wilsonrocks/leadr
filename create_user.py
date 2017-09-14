@@ -11,7 +11,7 @@ a = input()
 if a == "1":
     URL_STEM = "http://wilsonseverywhere.ddns.net:8000"
 elif a == "2":
-    URL_STEM = "https://leadr.freeciv.life"
+    URL_STEM = "http://leadr.freeciv.life"
 else:
     URL_STEM = a
 
