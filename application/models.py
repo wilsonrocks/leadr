@@ -76,7 +76,7 @@ class Turn(Model):
     class Meta:
         database = db
     timestamp = DateTimeField(default=datetime.now)
-    number = IntegerField()
-    year = CharField(max_length=6)
+    number = IntegerField(unique=True)
+    year = CharField(max_length=6, unique=True)
 
 
